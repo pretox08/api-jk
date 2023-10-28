@@ -7,6 +7,7 @@ create table TB_TIPO_PRODUTO (
 	TP_PRODUTO varchar(50)
 );
 
+drop table tb_tipo_produto;
 
 create table TB_TP_PAGAMENTO (
 	ID_TP_PAGAMENTO integer primary key auto_increment,
@@ -37,6 +38,8 @@ create table TB_ADMIN (
 	DS_SENHA varchar(200)
 );
 
+select * from tb_admin;
+
 create table TB_ENDERECO (
 	ID_ENDERECO integer primary key auto_increment,
     ID_CLIENTE integer,
@@ -52,14 +55,14 @@ create table tb_comentarios(
 id_comentario	int primary key auto_increment,
 ds_comentario	varchar(50),
 nr_avaliacao	int,
-nm_usuario		varchar(10)
+nm_usuario		varchar(20)
 );
 
 create table TB_PRODUTO (
 	ID_PRODUTO  int primary key auto_increment,
 	NM_PRODUTO varchar(100),
 	ID_TP_PRODUTO int,
-	VL_PRECO decimal(15,2),
+	VL_PRECO decimal(5.2),
 	BT_DISPONIVEL boolean,
 	QTD_ESTOQUE int,
 	NR_TAMANHO int,
@@ -73,6 +76,7 @@ create table TB_CARRINHO (
 	ID_PRODUTO integer,
     foreign key(id_produto)references TB_PRODUTO(id_produto)
 );
+
 
 create table TB_PEDIDO (
 	ID_PEDIDO int primary key auto_increment,
