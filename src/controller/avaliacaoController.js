@@ -3,15 +3,15 @@ import { InserirComentario, ListarComentarios } from "../repositories/avaliacaoR
 
 let endpoints = Router();
 
-endpoints.get('/clientes', async (req,resp) => {
-    let dados = await ListarClientes();
+endpoints.get('/comentarios', async (req,resp) => {
+    let dados = await ListarComentarios();
     resp.send(dados);
 })
 
-endpoints.post('/cadastrar', async (req,resp) => {
-    let comentario = req.body.comentario;
+endpoints.post('/comentar', async (req,resp) => {
+    let coment = req.body;
 
-    let dados = await InserirCliente(comentario);
+    let dados = await InserirComentario(coment);
     resp.send(dados);
 })
 

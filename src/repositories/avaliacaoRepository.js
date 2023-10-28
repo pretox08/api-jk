@@ -1,7 +1,7 @@
 import conexao from "./connection.js";
 
-export async function listarComentarios() {
-    let sql = 'select * from tb_avaliacao';
+export async function ListarComentarios() {
+    let sql = 'select * from tb_comentarios';
 
     let resp = await conexao.query(sql);
     let dados = resp(0);
@@ -9,12 +9,15 @@ export async function listarComentarios() {
     return dados;
 }
 
-export async function inserirComentario(coment) {
-    let sql = 'insert into tb_avaliacao(ds_comentario, nr_avaliacao) values(?, ?)'
+export async function InserirComentario(coment) {
+    let comando = 'insert into tb_comentarios(ds_comentario, nr_avaliacao, nm_usuario) values(?, ?, ?)'
 
-    let resp = await conexao.query(sql);
-    let dados = resp[0];
+    let [resp] = await conexao.query(comando, [
+        coment.comentario,
+        coment.avaliacao,
+        coment.usuario
+    ]);
 
-    coment.id = dados.insertId;
+    coment.id = resp.insertId;
     return coment;
 }

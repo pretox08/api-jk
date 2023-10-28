@@ -1,11 +1,11 @@
 import { Router } from "express";
-import { InserirCliente, ListarClientes, DeletarCliente } from "../repositories/ProdutoRepository.js";
+import { InserirCliente, Clientes, DeletarCliente, ConsultarCliente } from "../repositories/ClienteRepository.js";
 
 let endpoints = Router();
 
 
 endpoints.get('/clientes', async (resp) => {
-    let dados = await ListarClientes();
+    let dados = await Clientes();
     resp.send(dados);
 })
 

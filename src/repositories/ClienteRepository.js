@@ -1,8 +1,8 @@
 import conexao from "./connection.js";
 
 
-export async function listarClientes() {
-    let sql = 'select * from tb_cadastro';
+export async function Clientes() {
+    let sql = 'select * from TB_CADASTRO';
 
     let resp = await conexao.query(sql);
     let dados = resp(0);
@@ -15,7 +15,7 @@ export async function listarClientes() {
 
 export async function InserirCliente(cadastro) {
     let comando = `
-        INSERT INTO tb_cadastro(ds_email, ds_senha, ds_telefone, ds_nome, ds_sobrenome, dt_nascimento) VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO TB_CADASTRO(ds_email, ds_senha, ds_telefone, ds_nome, ds_sobrenome, dt_nascimento) VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
@@ -35,7 +35,7 @@ export async function InserirCliente(cadastro) {
 
   export async function DeletarCliente(id) {
     let comando = `
-        delete from tb_cadastro
+        delete from TB_CADASTRO
               where id_cadastro = ?
     `
   
@@ -52,9 +52,9 @@ export async function InserirCliente(cadastro) {
                ds_email         as email,
                ds_senha         as senha,
                ds_telefone      as telefone,
-               nm_cliente       as nome,
+               ds_nome          as nome,
                ds_sobrenome     as sobrenome
-          from tb_cadastro
+          from TB_CADASTRO
          where ds_nome like  ?
     `
   

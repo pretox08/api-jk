@@ -15,7 +15,7 @@ export async function listarProdutos() {
 
 export async function InserirProduto(produto) {
     let comando = `
-        INSERT INTO tb_produto(nm_produto, id_tp_produto, vl_preco, bt_disponivel, qtd_estoque, nr_tamanho ds_detalhes, id_produto_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO TB_PRODUTO(nm_produto, id_tp_produto, vl_preco, bt_disponivel, qtd_estoque, nr_tamanho, ds_detalhes, img_produto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
