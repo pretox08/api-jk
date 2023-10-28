@@ -1,5 +1,5 @@
-create database joiaskdb;
-use joiaskdb;
+create database joiasking;
+use joiasking;
 
 
 create table TB_TIPO_PRODUTO (
