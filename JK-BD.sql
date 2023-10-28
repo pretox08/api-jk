@@ -1,7 +1,7 @@
 create database joiasking;
 use joiasking;
 
-
+show tables;
 create table TB_TIPO_PRODUTO (
 	ID_TP_PRODUTO  int primary key auto_increment,
 	TP_PRODUTO varchar(50)
@@ -27,11 +27,12 @@ create table TB_CADASTRO (
 create table TB_CLIENTE (
 	ID_CLIENTE int primary key auto_increment,
 	ID_CADASTRO int,
-    foreign key(id_cadastro) references tb_cadastro(id_cadastro)
+    foreign key(id_cadastro) references TB_CADASTRO(id_cadastro)
 );
 
 create table TB_ADMIN (
 	ID_ADMIN integer primary key auto_increment,
+	NM_USUARIO	varchar(50),
 	DS_EMAIL varchar(200),
 	DS_SENHA varchar(200)
 );
@@ -44,7 +45,7 @@ create table TB_ENDERECO (
 	NR_CASA integer,
 	DS_CIDADE varchar(80),
 	DS_ESTADO varchar(100),
-    foreign key(id_cliente) references tb_cliente(id_cliente)
+    foreign key(id_cliente) references TB_CLIENTE(id_cliente)
 );
 
 create table tb_comentarios(
@@ -64,13 +65,13 @@ create table TB_PRODUTO (
 	NR_TAMANHO int,
 	DS_DETALHES varchar(300),
 	IMG_PRODUTO varchar(10000),
-    foreign key(id_tp_produto) references tb_tipo_produto(id_tp_produto)
+    foreign key(id_tp_produto) references TB_TIPO_PRODUTO(id_tp_produto)
 );
 
 create table TB_CARRINHO (
 	ID_CARRINHO integer primary key auto_increment,
 	ID_PRODUTO integer,
-    foreign key(id_produto)references tb_produto(id_produto)
+    foreign key(id_produto)references TB_PRODUTO(id_produto)
 );
 
 create table TB_PEDIDO (
@@ -84,7 +85,7 @@ create table TB_PEDIDO (
 	DS_SITUACAO boolean,
 	NR_CARTAO int,
 	NR_VERIFICACAO integer,
-    foreign key(id_tp_pagamento) references tb_tp_pagamento(id_tp_pagamento),
-    foreign key(id_cliente) references tb_cliente(id_cliente),
-    foreign key(id_endereco) references tb_endereco(id_endereco)
+    foreign key(id_tp_pagamento) references TB_TP_PAGAMENTO(id_tp_pagamento),
+    foreign key(id_cliente) references TB_CLIENTE(id_cliente),
+    foreign key(id_endereco) references TB_ENDERECO(id_endereco)
 );
