@@ -2,7 +2,7 @@ import conexao from "./connection.js";
 
 
 export async function Clientes() {
-    let sql = 'select * from TB_CADASTRO';
+    let sql = 'select * from TB_CLIENTE';
 
     let resp = await conexao.query(sql);
     let dados = resp(0);
@@ -15,7 +15,7 @@ export async function Clientes() {
 
 export async function InserirCliente(cadastro) {
     let comando = `
-        INSERT INTO TB_CADASTRO(ds_email, ds_senha, ds_telefone, ds_nome, ds_sobrenome, dt_nascimento) VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO TB_CADASTRO(ds_email, ds_senha, ds_telefone, ds_nome, ds_sobrenome, dt_nascimento, ds_cpf) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
@@ -24,7 +24,8 @@ export async function InserirCliente(cadastro) {
         cadastro.telefone,
         cadastro.nome,
         cadastro.sobrenome,
-        cadastro.nascimento
+        cadastro.nascimento,
+        cadastro.cpf
     ]);
 
     cadastro.id = resp.insertId;
@@ -35,8 +36,8 @@ export async function InserirCliente(cadastro) {
 
   export async function DeletarCliente(id) {
     let comando = `
-        delete from TB_CADASTRO
-              where id_cadastro = ?
+        delete from TB_CLIENTE
+              where ID_CLIENTE = ?
     `
   
     let [resp] = await conexao.query(comando, [id]);
@@ -46,18 +47,20 @@ export async function InserirCliente(cadastro) {
 
   
 
-  export async  function ConsultarCliente(nome) {
+  export async  function ConsultarCliente(cpf) {
     let comando = `
-        select id_cliente       as id,
+        select id_cadastro      as id,
                ds_email         as email,
                ds_senha         as senha,
                ds_telefone      as telefone,
                ds_nome          as nome,
-               ds_sobrenome     as sobrenome
+               ds_sobrenome     as sobrenome,
+               dt_nascimento    as nascimento,
+               ds_cpf           as cpf
           from TB_CADASTRO
-         where ds_nome like  ?
+         where ds_cpf like  ?
     `
   
-    let [dados] = await conexao.query(comando, ['%' + nome + '%'])
+    let [dados] = await conexao.query(comando, ['%' + cpf + '%'])
     return dados;
   };

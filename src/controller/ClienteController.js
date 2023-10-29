@@ -42,7 +42,8 @@ endpoints.delete('/cliente/:id', async (req, resp) => {
       resp.send(r);
     }
     catch (err) {
-      resp.status(500).send({ erro: 'Ocorreu um erro!' });
+      if(resp.status(500))
+      {({ err: 'Ocorreu um erro!' })};
     }
   })
 
