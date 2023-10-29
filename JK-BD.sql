@@ -62,7 +62,7 @@ create table TB_PRODUTO (
 	ID_PRODUTO  int primary key auto_increment,
 	NM_PRODUTO varchar(100),
 	ID_TP_PRODUTO int,
-	VL_PRECO decimal(5.2),
+	VL_PRECO decimal(5,2),
 	BT_DISPONIVEL boolean,
 	QTD_ESTOQUE int,
 	NR_TAMANHO int,
