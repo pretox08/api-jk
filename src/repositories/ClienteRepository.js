@@ -12,7 +12,6 @@ export async function Clientes() {
 
 
 
-
 export async function InserirCliente(cadastro) {
     let comando = `
         INSERT INTO TB_CADASTRO(ds_email, ds_senha, ds_telefone, ds_nome, ds_sobrenome, dt_nascimento, ds_cpf) VALUES (?, ?, ?, ?, ?, ?, ?)
@@ -43,7 +42,6 @@ export async function InserirCliente(cadastro) {
     let [resp] = await conexao.query(comando, [id]);
     return resp.affectedRows;
   };
-
 
   
 

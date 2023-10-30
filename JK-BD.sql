@@ -1,13 +1,10 @@
 create database joiasking;
 use joiasking;
 
-show tables;
 create table TB_TIPO_PRODUTO (
 	ID_TP_PRODUTO  int primary key auto_increment,
 	TP_PRODUTO varchar(50)
 );
-
-drop table tb_tipo_produto;
 
 create table TB_TP_PAGAMENTO (
 	ID_TP_PAGAMENTO integer primary key auto_increment,
@@ -37,8 +34,6 @@ create table TB_ADMIN (
 	DS_EMAIL varchar(200),
 	DS_SENHA varchar(200)
 );
-
-select * from tb_admin;
 
 create table TB_ENDERECO (
 	ID_ENDERECO integer primary key auto_increment,
