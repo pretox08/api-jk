@@ -15,7 +15,7 @@ export async function listarProdutos() {
 
 export async function InserirProduto(produto) {
     let comando = `
-        INSERT INTO TB_PRODUTO(nm_produto, id_tp_produto, vl_preco, bt_disponivel, qtd_estoque, nr_tamanho, ds_detalhes, img_produto) VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO TB_PRODUTO(id_produto, nm_produto, id_tp_produto, vl_preco, bt_disponivel, qtd_estoque, nr_tamanho, ds_detalhes) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
@@ -26,7 +26,6 @@ export async function InserirProduto(produto) {
         produto.estoque,
         produto.tamanho,
         produto.detalhes,
-        produto.imagem
     ]);
 
     produto.id = resp.insertId;
@@ -45,6 +44,16 @@ export async function InserirProduto(produto) {
     return resp.affectedRows;
   };
 
+  export async function InserirImagem(imagem, id) {
+
+    const comando = 
+    `update tb_produto
+          set img_produto = ?
+          where id_produto = ?`
+    
+    const [r] = await conexao.query(comando, [imagem,id]);
+    return r.affectedRows;
+  }
 
   
 

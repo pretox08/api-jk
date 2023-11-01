@@ -10,7 +10,17 @@ export async function Clientes() {
     return dados;
 }
 
+export async function Login(email, senha) {
+  const comando = `select id_cadastro   as id
+                   ds_email             as email,
+                   ds_senha             as senha,
+                from tb_cadastro
+                where ds_email = ?
+                and ds_senha = ? `
 
+  const [linhas] = await conexao.query(comando, [email, senha])
+  return linhas[0];
+}
 
 export async function InserirCliente(cadastro) {
     let comando = `

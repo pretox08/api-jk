@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { InserirCliente, Clientes, DeletarCliente, ConsultarCliente } from "../repositories/ClienteRepository.js";
+import { InserirCliente, Clientes, DeletarCliente, ConsultarCliente, Login } from "../repositories/ClienteRepository.js";
 
 let endpoints = Router();
 
@@ -9,7 +9,24 @@ endpoints.get('/clientes', async (resp) => {
     resp.send(dados);
 })
 
+endpoints.post('/login', async (req,resp) => {
+  try {
+    const { email, senha } = req.body;
+    
+    const r = await Login(email, senha);
 
+    if(!r) {
+      throw new Error('⚠️ Informações inválidas')
+    }
+    resp.send(r)
+  } 
+  
+  catch(err) {
+    resp.status(401).send({
+      erro: err.message
+    });
+  }
+})
 
 endpoints.post('/cadastrar', async (req,resp) => {
     let cadastro = req.body;
