@@ -62,7 +62,6 @@ create table TB_PRODUTO (
 	QTD_ESTOQUE int,
 	NR_TAMANHO int,
 	DS_DETALHES varchar(300),
-	IMG_PRODUTO varchar(10000),
     foreign key(id_tp_produto) references TB_TIPO_PRODUTO(id_tp_produto)
 );
 

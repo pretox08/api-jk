@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { InserirProduto, DeletarProduto, ConsultarProduto, listarProdutos, InserirImagem } from "../repositories/ProdutoRepository.js";
+import { InserirProduto, DeletarProduto, ConsultarProduto, listarProdutos, InserirImagem, EditarProduto } from "../repositories/ProdutoRepository.js";
 
 import multer from 'multer';
 
@@ -7,12 +7,67 @@ let endpoints = Router();
 const upload = multer({ dest: 'storage/imgProdutos' })
 
 
-endpoints.get('/produtos', async (resp) => {
-    let dados = await listarProdutos();
-    resp.send(dados);
+endpoints.get('/produtos', async (req, resp) => {
+      try {
+          const r = await listarProdutos();
+          resp.send(r)
+      }
+
+      catch (err) {
+        resp.status(400).send({
+          erro: err.message
+        })
+      }
 })
 
+endpoints.put('/produto/:id', async (req,resp) => {
+  try {
+      const { id } = req.params;
+      const produto = req.body;
 
+      const r = await EditarProduto(id, produto)
+
+      if(r != 1)
+        throw new Error('Erro na alteração do produto!')
+
+        if(!produto.nome) {
+          throw new Error('Nome do produto é obrigatório!')
+        }
+    
+        if(!produto.tipo){
+          throw new Error('Tipo do produto obrigatório!')
+        }
+    
+        if(!produto.preco){
+          throw new Error('Preço obrigatório!') 
+        }
+
+        if(produto.disponivel == undefined){
+          throw new Error('Preencha o campo de disponível!')
+        }
+    
+        if(!produto.estoque){
+          throw new Error('Coloque a quantidade em estoque!')
+        }
+    
+        if(!produto.tamanho){
+          throw new Error('Tamanho obrigatório!')
+        }
+    
+        if(!produto.detalhes){
+          throw new Error('Insira os detalhes do produto!')
+        }
+
+      else 
+        resp.status(204).send()
+  }
+
+  catch(err) {
+    resp.status(400).send({
+      erro: err.message
+    })
+  }
+})
 
 endpoints.post('/produto', async (req,resp) => {
   try{
@@ -28,6 +83,10 @@ endpoints.post('/produto', async (req,resp) => {
 
     if(!produto.preco){
       throw new Error('Preço obrigatório!') 
+    }
+
+    if(produto.disponivel == undefined){
+      throw new Error('Preencha o campo de disponível!')
     }
 
     if(!produto.estoque){
@@ -57,8 +116,14 @@ endpoints.put('/produto/:id/imagem', upload.single('imagem'), async (req,resp) =
 
     try {
       const {id} = req.params;
+      const imagem = req.file.path;
 
-      const resp = await InserirImagem()
+      const r = await InserirImagem(imagem,id);
+      if(r != 1){
+        throw new Error('A imagem não pode ser salva!') 
+      }
+
+      resp.status(204).send();
     }
 
     catch (err) {
@@ -69,32 +134,36 @@ endpoints.put('/produto/:id/imagem', upload.single('imagem'), async (req,resp) =
 })
 
 
+endpoints.get('/produtos/busca', async (req, resp) => {
+  try {
+    const { nome } = req.query
+    const r = await ConsultarProduto(nome);
+    
+    if(!r)
+      throw new Error('Produto não encontrado!') 
+
+    resp.send(r)
+  }
+  catch (err) {
+    resp.status(500).send({ erro: 'Ocorreu um erro!' });
+  }
+})
+
 
 endpoints.delete('/produto/:id', async (req, resp) => {
     try {
-      let id = req.params.id;
+      const { id } = req.params
       let r = await DeletarProduto(id);
-      if (r == 0)
+      if (r != 1)
         throw new Error('Não foi possível excluir este item.');
   
-      resp.send();
+      resp.status(204).send();
     }
     catch (err) {
       resp.status(500).send({ erro: err.message });
     }
   });
 
-
-  endpoints.get('/produtos/busca', async (req, resp) => {
-    try {
-      let nome = req.query.nome;
-      let r = await ConsultarProduto(nome);
-      resp.send(r);
-    }
-    catch (err) {
-      resp.status(500).send({ erro: 'Ocorreu um erro!' });
-    }
-  })
 
 
 export default endpoints;

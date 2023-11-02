@@ -9,10 +9,22 @@ endpoints.get('/comentarios', async (req,resp) => {
 })
 
 endpoints.post('/comentar', async (req,resp) => {
-    let coment = req.body;
-
-    let dados = await InserirComentario(coment);
-    resp.send(dados);
-})
+    try {
+      const { comentario, avaliacao, usuario } = req.body;
+      
+      const r = await InserirComentario(comentario, avaliacao, usuario);
+  
+      if(!r) {
+        throw new Error('⚠️ Informações inválidas')
+      }
+      resp.send(r)
+    } 
+    
+    catch(err) {
+      resp.status(401).send({
+        erro: err.message
+      });
+    }
+  })
 
 export default endpoints;

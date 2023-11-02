@@ -1,21 +1,27 @@
 import conexao from "./connection.js";
 
 
-export async function listarProdutos() {
-    let sql = 'select * from tb_produto';
+  export async function listarProdutos() {
+    let sql = `select id_produto       as id,
+                      nm_produto       as nome,
+                      id_tp_produto    as tipo,
+                      vl_preco         as preco,
+                      bt_disponivel    as disponivel,
+                      qtd_estoque      as estoque,
+                      nr_tamanho       as tamanho,
+                      ds_detalhes      as detalhes
+                from tb_produto `;
 
-    let resp = await conexao.query(sql);
-    let dados = resp(0);
+    let [resp] = await conexao.query(sql);
 
-    return dados;
+    return resp;
 }
 
 
 
-
-export async function InserirProduto(produto) {
+  export async function InserirProduto(produto) {
     let comando = `
-        INSERT INTO TB_PRODUTO(id_produto, nm_produto, id_tp_produto, vl_preco, bt_disponivel, qtd_estoque, nr_tamanho, ds_detalhes) VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO TB_PRODUTO(nm_produto, id_tp_produto, vl_preco, bt_disponivel, qtd_estoque, nr_tamanho, ds_detalhes) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
@@ -44,6 +50,34 @@ export async function InserirProduto(produto) {
     return resp.affectedRows;
   };
 
+  export async function EditarProduto(id, produto) {
+      const comando = 
+      `update tb_produto
+              set nm_produto =    ?,
+                  id_tp_produto = ?,
+                  vl_preco =      ?,
+                  bt_disponivel = ?,
+                  qtd_estoque =   ?,
+                  nr_tamanho =    ?,
+                  ds_detalhes =   ?
+            where id_produto =    ?
+      `
+
+      const [r] = await conexao.query(comando, [
+        produto.nome,
+        produto.tipo,
+        produto.preco,
+        produto.disponivel,
+        produto.estoque,
+        produto.tamanho,
+        produto.detalhes,
+        id
+      ])
+
+      return r.affectedRows
+  }
+
+
   export async function InserirImagem(imagem, id) {
 
     const comando = 
@@ -59,7 +93,7 @@ export async function InserirProduto(produto) {
 
   export async  function ConsultarProduto(nome) {
     let comando = `
-        select id_cliente       as id,
+        select id_produto       as id,
                nm_produto       as nome,
                id_tp_produto    as tipo,
                vl_preco         as preco,
@@ -72,6 +106,6 @@ export async function InserirProduto(produto) {
          where nm_produto like  ?
     `
   
-    let [dados] = await conexao.query(comando, ['%' + nome + '%'])
+    let [dados] = await conexao.query(comando, [`%${nome}%`])
     return dados;
   };
