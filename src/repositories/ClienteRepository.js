@@ -13,9 +13,9 @@ export async function Clientes() {
 
 
 export async function Login(email, senha) {
-  const comando = `select id_cadastro   as id
+  const comando = `select id_cadastro   as id,
                    ds_email             as email,
-                   ds_senha             as senha,
+                   ds_senha             as senha
                 from tb_cadastro
                 where ds_email = ?
                 and ds_senha = ? `
@@ -24,6 +24,18 @@ export async function Login(email, senha) {
   return linhas[0];
 }
 
+
+export async function LoginAdm(email, senha) {
+  const comando = `select id_admin      as id,
+                   ds_email             as email,
+                   ds_senha             as senha
+                from tb_admin
+                where ds_email = ?
+                and ds_senha = ? `
+
+  const [linhas] = await conexao.query(comando, [email, senha])
+  return linhas[0];
+}
 
 
 export async function InserirCliente(cadastro) {

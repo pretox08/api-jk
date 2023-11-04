@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { InserirCliente, Clientes, DeletarCliente, ConsultarCliente, Login } from "../repositories/ClienteRepository.js";
+import { InserirCliente, Clientes, DeletarCliente, ConsultarCliente, Login, LoginAdm } from "../repositories/ClienteRepository.js";
 
 let endpoints = Router();
 
@@ -8,6 +8,7 @@ endpoints.get('/clientes', async (resp) => {
     let dados = await Clientes();
     resp.send(dados);
 })
+
 
 endpoints.post('/login', async (req,resp) => {
   try {
@@ -27,6 +28,27 @@ endpoints.post('/login', async (req,resp) => {
     });
   }
 })
+
+
+endpoints.post('/loginadm', async (req,resp) => {
+  try {
+    const { email, senha } = req.body;
+    
+    const r = await LoginAdm(email, senha);
+
+    if(!r) {
+      throw new Error('⚠️ Informações incorretas!')
+    }
+    resp.send(r)
+  } 
+  
+  catch(err) {
+    resp.status(401).send({
+      erro: err.message
+    });
+  }
+})
+
 
 endpoints.post('/cadastrar', async (req,resp) => {
     let cadastro = req.body;
