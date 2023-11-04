@@ -50,6 +50,8 @@ import conexao from "./connection.js";
     return resp.affectedRows;
   };
 
+
+
   export async function EditarProduto(id, produto) {
       const comando = 
       `update tb_produto
@@ -78,6 +80,8 @@ import conexao from "./connection.js";
   }
 
 
+
+
   export async function InserirImagem(imagem, id) {
 
     const comando = 
@@ -89,6 +93,8 @@ import conexao from "./connection.js";
     return r.affectedRows;
   }
 
+
+  
   
 
   export async  function ConsultarProduto(nome) {

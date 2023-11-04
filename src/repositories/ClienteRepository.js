@@ -10,6 +10,8 @@ export async function Clientes() {
     return dados;
 }
 
+
+
 export async function Login(email, senha) {
   const comando = `select id_cadastro   as id
                    ds_email             as email,
@@ -21,6 +23,8 @@ export async function Login(email, senha) {
   const [linhas] = await conexao.query(comando, [email, senha])
   return linhas[0];
 }
+
+
 
 export async function InserirCliente(cadastro) {
     let comando = `
@@ -43,6 +47,8 @@ export async function InserirCliente(cadastro) {
 
 
 
+
+
   export async function DeletarCliente(id) {
     let comando = `
         delete from TB_CLIENTE
@@ -52,6 +58,8 @@ export async function InserirCliente(cadastro) {
     let [resp] = await conexao.query(comando, [id]);
     return resp.affectedRows;
   };
+
+  
 
   
 
