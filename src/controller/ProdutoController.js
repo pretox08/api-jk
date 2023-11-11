@@ -41,10 +41,6 @@ endpoints.put('/produto/:id', async (req,resp) => {
         if(!produto.preco){
           throw new Error('Preço obrigatório!') 
         }
-
-        if(produto.disponivel == undefined){
-          throw new Error('Preencha o campo de disponível!')
-        }
     
         if(!produto.estoque){
           throw new Error('Coloque a quantidade em estoque!')
@@ -83,10 +79,6 @@ endpoints.post('/produto', async (req,resp) => {
 
     if(!produto.preco){
       throw new Error('Preço obrigatório!') 
-    }
-
-    if(produto.disponivel == undefined){
-      throw new Error('Preencha o campo de disponível!')
     }
 
     if(!produto.estoque){

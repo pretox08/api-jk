@@ -6,7 +6,6 @@ import conexao from "./connection.js";
                       nm_produto       as nome,
                       id_tp_produto    as tipo,
                       vl_preco         as preco,
-                      bt_disponivel    as disponivel,
                       qtd_estoque      as estoque,
                       nr_tamanho       as tamanho,
                       ds_detalhes      as detalhes
@@ -21,14 +20,13 @@ import conexao from "./connection.js";
 
   export async function InserirProduto(produto) {
     let comando = `
-        INSERT INTO TB_PRODUTO(nm_produto, id_tp_produto, vl_preco, bt_disponivel, qtd_estoque, nr_tamanho, ds_detalhes) VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO TB_PRODUTO(nm_produto, id_tp_produto, vl_preco, qtd_estoque, nr_tamanho, ds_detalhes) VALUES (?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
         produto.nome,
         produto.tipo,
         produto.preco,
-        produto.disponivel,
         produto.estoque,
         produto.tamanho,
         produto.detalhes,
@@ -58,7 +56,6 @@ import conexao from "./connection.js";
               set nm_produto =    ?,
                   id_tp_produto = ?,
                   vl_preco =      ?,
-                  bt_disponivel = ?,
                   qtd_estoque =   ?,
                   nr_tamanho =    ?,
                   ds_detalhes =   ?
@@ -69,7 +66,6 @@ import conexao from "./connection.js";
         produto.nome,
         produto.tipo,
         produto.preco,
-        produto.disponivel,
         produto.estoque,
         produto.tamanho,
         produto.detalhes,
@@ -86,7 +82,7 @@ import conexao from "./connection.js";
 
     const comando = 
     `update tb_produto
-          set img_produto = ?
+          set IMG_PRODUTO = ?
           where id_produto = ?`
     
     const [r] = await conexao.query(comando, [imagem,id]);
@@ -103,7 +99,6 @@ import conexao from "./connection.js";
                nm_produto       as nome,
                id_tp_produto    as tipo,
                vl_preco         as preco,
-               bt_disponivel    as disponivel,
                qtd_estoque      as estoque,
                nr_tamanho       as tamanho,
                ds_detalhes      as detalhes,
