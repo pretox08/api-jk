@@ -8,7 +8,8 @@ import conexao from "./connection.js";
                       vl_preco         as preco,
                       qtd_estoque      as estoque,
                       nr_tamanho       as tamanho,
-                      ds_detalhes      as detalhes
+                      ds_detalhes      as detalhes,
+                      cod_produto      as codigo
                 from tb_produto `;
 
     let [resp] = await conexao.query(sql);
@@ -20,7 +21,7 @@ import conexao from "./connection.js";
 
   export async function InserirProduto(produto) {
     let comando = `
-        INSERT INTO TB_PRODUTO(nm_produto, id_tp_produto, vl_preco, qtd_estoque, nr_tamanho, ds_detalhes) VALUES (?, ?, ?, ?, ?, ?)
+        INSERT INTO TB_PRODUTO(nm_produto, id_tp_produto, vl_preco, qtd_estoque, nr_tamanho, ds_detalhes, cod_produto) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
@@ -30,6 +31,7 @@ import conexao from "./connection.js";
         produto.estoque,
         produto.tamanho,
         produto.detalhes,
+        produto.codigo
     ]);
 
     produto.id = resp.insertId;
@@ -58,7 +60,8 @@ import conexao from "./connection.js";
                   vl_preco =      ?,
                   qtd_estoque =   ?,
                   nr_tamanho =    ?,
-                  ds_detalhes =   ?
+                  ds_detalhes =   ?,
+                  cod_produto =   ?,
             where id_produto =    ?
       `
 
@@ -69,6 +72,7 @@ import conexao from "./connection.js";
         produto.estoque,
         produto.tamanho,
         produto.detalhes,
+        produto.codigo,
         id
       ])
 
@@ -102,9 +106,10 @@ import conexao from "./connection.js";
                qtd_estoque      as estoque,
                nr_tamanho       as tamanho,
                ds_detalhes      as detalhes,
-               img_produto      as imagem
+               img_produto      as imagem,
+               cod_produto      as codigo
           from tb_produto
-         where nm_produto like  ?
+         where id_tp_produto like  ?
     `
   
     let [dados] = await conexao.query(comando, [`%${nome}%`])

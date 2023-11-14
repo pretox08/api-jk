@@ -54,6 +54,10 @@ endpoints.put('/produto/:id', async (req,resp) => {
           throw new Error('Insira os detalhes do produto!')
         }
 
+        if(!produto.codigo){
+          throw new Error('Insira o código do produto!')
+        }
+
       else 
         resp.status(204).send()
   }
@@ -91,6 +95,10 @@ endpoints.post('/produto', async (req,resp) => {
 
     if(!produto.detalhes){
       throw new Error('Insira os detalhes do produto!')
+    }
+
+    if(!produto.codigo){
+      throw new Error('Insira um código ao produto!')
     }
 
     let dados = await InserirProduto(produto);

@@ -22,6 +22,13 @@ create table TB_CADASTRO (
 	DT_NASCIMENTO varchar(100)
 );
 
+create table TB_PERFIL(
+	ID_PERFIL integer primary key auto_increment,
+	ID_CADASTRO integer,
+	CF_EMAIL varchar(100)
+	foreign key(id_cadastro) references tb_cadastro(id_cadastro)
+);
+
 create table TB_CLIENTE (
 	ID_CLIENTE int primary key auto_increment,
 	ID_CADASTRO int,
