@@ -10,7 +10,7 @@ let servidor = express();
 servidor.use(cors());
 servidor.use(express.json());
 
-servidor.use('/storage/imgProdutos', express.static('storage/imgPRodutos'));
+servidor.use('/storage/imgProdutos', express.static('storage/imgProdutos'));
 
 servidor.use(ProdutoController);
 servidor.use(ClienteController);
