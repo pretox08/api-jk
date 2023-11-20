@@ -3,7 +3,7 @@ import { InserirProduto, DeletarProduto, ConsultarProduto, listarProdutos, Inser
 
 import multer from 'multer';
 
-let endpoints = Router();
+const endpoints = Router();
 const upload = multer({ dest: 'storage/imgProdutos' })
 
 
@@ -150,10 +150,11 @@ endpoints.get('/produtos/busca', async (req, resp) => {
 })
 
 
+
 endpoints.delete('/produto/:id', async (req, resp) => {
     try {
       const { id } = req.params
-      let r = await DeletarProduto(id);
+      const r = await DeletarProduto(id);
       if (r != 1)
         throw new Error('Não foi possível excluir este item.');
   

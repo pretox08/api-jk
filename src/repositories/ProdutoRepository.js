@@ -21,7 +21,7 @@ import conexao from "./connection.js";
 
   export async function InserirProduto(produto) {
     let comando = `
-        INSERT INTO TB_PRODUTO(nm_produto, id_tp_produto, vl_preco, qtd_estoque, nr_tamanho, ds_detalhes, cod_produto) VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO tb_produto(nm_produto, id_tp_produto, vl_preco, qtd_estoque, nr_tamanho, ds_detalhes, cod_produto) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
@@ -87,7 +87,7 @@ import conexao from "./connection.js";
     const comando = 
     `update tb_produto
           set IMG_PRODUTO = ?
-          where id_produto = ?`
+          where ID_PRODUTO = ?`
     
     const [r] = await conexao.query(comando, [imagem,id]);
     return r.affectedRows;
@@ -109,7 +109,7 @@ import conexao from "./connection.js";
                img_produto      as imagem,
                cod_produto      as codigo
           from tb_produto
-         where id_tp_produto like  ?
+         where nm_produto like  ?
     `
   
     let [dados] = await conexao.query(comando, [`%${nome}%`])

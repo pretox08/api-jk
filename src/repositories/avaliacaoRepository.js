@@ -1,12 +1,15 @@
 import conexao from "./connection.js";
 
 export async function ListarComentarios() {
-    let sql = 'select * from tb_comentarios';
+    let sql = `select id_comentarios       as id,
+                      ds_comentario         as comentario,
+                      nr_avaliacao         as avaliacao,
+                      nm_usuario           as usuario
+                from tb_comentarios `;
 
-    let resp = await conexao.query(sql);
-    let dados = resp(0);
+    let [resp] = await conexao.query(sql);
 
-    return dados;
+    return resp;
 }
 
 export async function InserirComentario(coment) {
