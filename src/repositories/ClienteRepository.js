@@ -1,17 +1,6 @@
 import conexao from "./connection.js";
 
 
-export async function Clientes() {
-    let sql = 'select * from TB_CLIENTE';
-
-    let resp = await conexao.query(sql);
-    let dados = resp(0);
-
-    return dados;
-}
-
-
-
 export async function Login(email, senha) {
   const comando = `select id_cadastro   as id,
                    ds_email             as email,
@@ -63,8 +52,8 @@ export async function InserirCliente(cadastro) {
 
   export async function DeletarCliente(id) {
     let comando = `
-        delete from TB_CLIENTE
-              where ID_CLIENTE = ?
+        delete from tb_cadastro
+              where ID_CADASTRO = ?
     `
   
     let [resp] = await conexao.query(comando, [id]);
