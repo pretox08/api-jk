@@ -16,7 +16,6 @@ create table tb_tp_pagamento (
 );
 
 
-
 create table tb_cadastro (
 	ID_CADASTRO integer primary key auto_increment,
 	DS_EMAIL varchar(100),
@@ -27,6 +26,19 @@ create table tb_cadastro (
 	DT_NASCIMENTO varchar(100),
     IMG_PERFIL varchar(1000)
 );
+
+
+create table tb_perfil(
+	ID_PERFIL int primary key auto_increment,
+	DS_NOME varchar(100),
+	DS_SOBRENOME varchar(100),
+	DS_EMAIL varchar(100),
+	CF_EMAIL varchar(100),
+	IMG_PERFIL varchar(10000)
+	foreign key(DS_NOME) references tb_cadastro(DS_NOME)
+	foreign key(DS_SOBRENOME) references tb_cadastro(DS_SOBRENOME)
+	foreign key() references tb_cadastro()
+)
 
 
 create table tb_admin (
