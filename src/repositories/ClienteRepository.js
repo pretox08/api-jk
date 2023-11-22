@@ -29,7 +29,7 @@ export async function LoginAdm(email, senha) {
 
 export async function InserirCliente(cadastro) {
     let comando = `
-        INSERT INTO TB_CADASTRO(ds_email, ds_senha, ds_telefone, ds_nome, ds_sobrenome, dt_nascimento, ds_cpf) VALUES (?, ?, ?, ?, ?, ?, ?)
+        INSERT INTO tb_cadastro(ds_email, ds_senha, ds_telefone, ds_nome, ds_sobrenome, dt_nascimento, ds_cpf) VALUES (?, ?, ?, ?, ?, ?, ?)
     `;
 
     let [resp] = await conexao.query(comando, [
@@ -74,7 +74,7 @@ export async function InserirCliente(cadastro) {
                ds_sobrenome     as sobrenome,
                dt_nascimento    as nascimento,
                ds_cpf           as cpf
-          from TB_CADASTRO
+         from tb_cadastro
          where ds_cpf like  ?
     `
   

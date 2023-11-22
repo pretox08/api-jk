@@ -166,5 +166,6 @@ endpoints.delete('/produto/:id', async (req, resp) => {
   });
 
 
+  
 
 export default endpoints;
