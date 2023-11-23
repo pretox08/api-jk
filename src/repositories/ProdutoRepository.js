@@ -61,7 +61,7 @@ import conexao from "./connection.js";
                   qtd_estoque =   ?,
                   nr_tamanho =    ?,
                   ds_detalhes =   ?,
-                  cod_produto =   ?,
+                  cod_produto =   ?
             where id_produto =    ?
       `
 
@@ -115,3 +115,22 @@ import conexao from "./connection.js";
     let [dados] = await conexao.query(comando, [`%${nome}%`])
     return dados;
   };
+
+
+  export async function BuscarPorID(id) {
+    const comando = 
+    `select id_produto       as id,
+            nm_produto       as nome,
+            id_tp_produto    as tipo,
+            vl_preco         as preco,
+            qtd_estoque      as estoque,
+            nr_tamanho       as tamanho,
+            ds_detalhes      as detalhes,
+            img_produto      as imagem,
+            cod_produto      as codigo
+        from tb_produto
+        where id_produto like ?
+`
+    const [linhas] = await conexao.query(comando, [id])
+    return linhas[0]
+  }

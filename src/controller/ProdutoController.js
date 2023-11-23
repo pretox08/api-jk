@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { InserirProduto, DeletarProduto, ConsultarProduto, listarProdutos, InserirImagem, EditarProduto } from "../repositories/ProdutoRepository.js";
+import { InserirProduto, BuscarPorID, DeletarProduto, ConsultarProduto, listarProdutos, InserirImagem, EditarProduto } from "../repositories/ProdutoRepository.js";
 
 import multer from 'multer';
 
@@ -118,7 +118,11 @@ endpoints.put('/produto/:id/imagem', upload.single('imagem'), async (req,resp) =
       const {id} = req.params;
       const imagem = req.file.path;
 
-      const r = await InserirImagem(imagem,id);
+      if(!req.file){
+        throw new Error('Escolha a imagem do produto')
+      }
+
+      const r = await InserirImagem(imagem, id);
       if(r != 1){
         throw new Error('A imagem não pode ser salva!') 
       }
@@ -153,7 +157,9 @@ endpoints.get('/produtos/busca', async (req, resp) => {
 
 endpoints.delete('/produto/:id', async (req, resp) => {
     try {
+
       const { id } = req.params
+
       const r = await DeletarProduto(id);
       if (r != 1)
         throw new Error('Não foi possível excluir este item.');
@@ -161,9 +167,32 @@ endpoints.delete('/produto/:id', async (req, resp) => {
       resp.status(204).send();
     }
     catch (err) {
-      resp.status(500).send({ erro: err.message });
+      resp.status(400).send({
+         erro: err.message
+      });
     }
   });
+
+  endpoints.get('/produto/:id', async (req,resp) => {
+    try {
+        const { id } = req.params
+
+        const r = await BuscarPorID(id)
+
+        if(!r){
+          resp.status(404).send([])
+        }
+        else{
+          resp.send(r)
+        }
+    }
+
+    catch(err){
+      resp.status(400).send({
+        erro: err.message
+      })
+    }
+  })
 
 
   
