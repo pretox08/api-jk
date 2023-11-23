@@ -37,7 +37,7 @@ create table tb_perfil(
 	IMG_PERFIL varchar(10000)
 	foreign key(DS_NOME) references tb_cadastro(DS_NOME)
 	foreign key(DS_SOBRENOME) references tb_cadastro(DS_SOBRENOME)
-	foreign key() references tb_cadastro()
+	foreign key(DS_EMAIL) references tb_cadastro(DS_EMAIL)
 )
 
 

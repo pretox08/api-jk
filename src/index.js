@@ -4,7 +4,7 @@ import cors from 'cors';
 
 import ProdutoController from './controller/ProdutoController.js';
 import ClienteController from './controller/ClienteController.js';
-import avaliacaoController from './controller/avaliacaoController.js';
+import CategoriasController from './controller/CategoriasController.js';
 
 
 let servidor = express();
@@ -15,6 +15,6 @@ servidor.use('/storage/imgProdutos', express.static('storage/imgProdutos'));
 
 servidor.use(ProdutoController);
 servidor.use(ClienteController);
-servidor.use(avaliacaoController)
+servidor.use(CategoriasController);
 
 servidor.listen(process.env.PORT, () => console.log('API subiu!'))
