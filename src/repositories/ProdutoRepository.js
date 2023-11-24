@@ -99,15 +99,14 @@ import conexao from "./connection.js";
 
   export async  function ConsultarProduto(nome) {
     let comando = `
-        select id_produto       as id,
-               nm_produto       as nome,
-               id_tp_produto    as tipo,
-               vl_preco         as preco,
-               qtd_estoque      as estoque,
-               nr_tamanho       as tamanho,
-               ds_detalhes      as detalhes,
-               img_produto      as imagem,
-               cod_produto      as codigo
+        select ID_PRODUTO       as id,
+               NM_PRODUTO       as nome,
+               ID_TP_PRODUTO    as tipo,
+               VL_PRECO         as preco,
+               QTD_ESTOQUE      as estoque,
+               NR_TAMANHO       as tamanho,
+               DS_DETALHES      as detalhes,
+               COD_PRODUTO      as codigo
           from tb_produto
          where nm_produto like  ?
     `
@@ -119,18 +118,18 @@ import conexao from "./connection.js";
 
   export async function BuscarPorID(id) {
     const comando = 
-    `select id_produto       as id,
-            nm_produto       as nome,
-            id_tp_produto    as tipo,
-            vl_preco         as preco,
-            qtd_estoque      as estoque,
-            nr_tamanho       as tamanho,
-            ds_detalhes      as detalhes,
-            img_produto      as imagem,
-            cod_produto      as codigo
-        from tb_produto
-        where id_produto like ?
-`
-    const [linhas] = await conexao.query(comando, [id])
-    return linhas[0]
+            `select   ID_PRODUTO       as id,
+                      NM_PRODUTO       as nome,
+                      ID_TP_PRODUTO    as tipo,
+                      VL_PRECO         as preco,
+                      QTD_ESTOQUE      as estoque,
+                      NR_TAMANHO       as tamanho,
+                      DS_DETALHES      as detalhes,
+                      IMG_PRODUTO      as imagem,
+                      COD_PRODUTO      as codigo
+              from tb_produto
+              where id_produto = ? `;
+
+    let [resp] = await conexao.query(comando, [id]);
+    return resp[0];
   }

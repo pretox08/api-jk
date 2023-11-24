@@ -139,18 +139,23 @@ endpoints.put('/produto/:id/imagem', upload.single('imagem'), async (req,resp) =
 
 
 endpoints.get('/produtos/busca', async (req, resp) => {
-  try {
-    const { nome } = req.query
-    const r = await ConsultarProduto(nome);
-    
-    if(!r)
-      throw new Error('Produto não encontrado!') 
+    try {
+      const { nome } = req.query;
 
-    resp.send(r)
-  }
-  catch (err) {
-    resp.status(500).send({ erro: 'Ocorreu um erro!' });
-  }
+      const r = await ConsultarProduto(nome);
+
+      if(r.length == 0){
+        resp.status(404).send([])
+      }
+      else {
+        resp.send(r)
+      }
+    }
+    catch(err){
+      resp.status(400).send({
+        erro: err.message
+      })
+    }
 })
 
 
@@ -180,7 +185,9 @@ endpoints.delete('/produto/:id', async (req, resp) => {
         const r = await BuscarPorID(id)
 
         if(!r){
-          resp.status(404).send([])
+          resp.status(404).send({
+            erro: 'Produto não encontrado'
+          })
         }
         else{
           resp.send(r)
