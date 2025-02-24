@@ -1,18 +1,17 @@
 import conexao from "./connection.js";
-
+import randomString from 'randomstring';
 
   export async function listarProdutos() {
-    let sql = `select id_produto       as id,
+    const comando = `select id_produto       as id,
                       nm_produto       as nome,
-                      id_tp_produto    as tipo,
+                      id_categoria     as categoria,
                       vl_preco         as preco,
                       qtd_estoque      as estoque,
-                      nr_tamanho       as tamanho,
                       ds_detalhes      as detalhes,
                       cod_produto      as codigo
                 from tb_produto `;
 
-    let [resp] = await conexao.query(sql);
+    let [resp] = await conexao.query(comando);
 
     return resp;
 }
@@ -20,28 +19,34 @@ import conexao from "./connection.js";
 
 
   export async function InserirProduto(produto) {
-    let comando = `
-        INSERT INTO tb_produto(nm_produto, id_tp_produto, vl_preco, qtd_estoque, nr_tamanho, ds_detalhes, cod_produto) VALUES (?, ?, ?, ?, ?, ?, ?)
+    const comando = `
+        INSERT INTO tb_produto(nm_produto, id_categoria, vl_preco, qtd_estoque, ds_detalhes, cod_produto, dt_criacao) 
+                    VALUES(?, ?, ?, ?, ?, ?, ?)
     `;
+
+    const codigoproduto = randomString.generate(7);
+    const dataAtual = new Date();
 
     let [resp] = await conexao.query(comando, [
         produto.nome,
-        produto.tipo,
+        produto.categoria,
         produto.preco,
         produto.estoque,
-        produto.tamanho,
         produto.detalhes,
-        produto.codigo
+        codigoproduto,
+        dataAtual
     ]);
 
     produto.id = resp.insertId;
+    produto.codigo = codigoproduto;
+    produto.data = dataAtual;
     return produto;
 }
 
 
 
   export async function DeletarProduto(id) {
-    let comando = `
+    const comando = `
         delete from tb_produto
               where id_produto = ?
     `
@@ -56,10 +61,9 @@ import conexao from "./connection.js";
       const comando = 
       `update tb_produto
               set nm_produto =    ?,
-                  id_tp_produto = ?,
+                  id_categoria =  ?,
                   vl_preco =      ?,
                   qtd_estoque =   ?,
-                  nr_tamanho =    ?,
                   ds_detalhes =   ?,
                   cod_produto =   ?
             where id_produto =    ?
@@ -67,7 +71,7 @@ import conexao from "./connection.js";
 
       const [r] = await conexao.query(comando, [
         produto.nome,
-        produto.tipo,
+        produto.categoria,
         produto.preco,
         produto.estoque,
         produto.tamanho,
@@ -89,7 +93,7 @@ import conexao from "./connection.js";
           set IMG_PRODUTO = ?
           where ID_PRODUTO = ?`
     
-    const [r] = await conexao.query(comando, [imagem,id]);
+    const [r] = await conexao.query(comando, [imagem, id]);
     return r.affectedRows;
   }
 
@@ -98,13 +102,12 @@ import conexao from "./connection.js";
   
 
   export async  function ConsultarProduto(nome) {
-    let comando = `
+    const comando = `
         select ID_PRODUTO       as id,
                NM_PRODUTO       as nome,
-               ID_TP_PRODUTO    as tipo,
+               ID_CATEGORIA     as categoria,
                VL_PRECO         as preco,
                QTD_ESTOQUE      as estoque,
-               NR_TAMANHO       as tamanho,
                DS_DETALHES      as detalhes,
                COD_PRODUTO      as codigo
           from tb_produto
@@ -116,14 +119,15 @@ import conexao from "./connection.js";
   };
 
 
+
+
   export async function BuscarPorID(id) {
     const comando = 
             `select   ID_PRODUTO       as id,
                       NM_PRODUTO       as nome,
-                      ID_TP_PRODUTO    as tipo,
+                      ID_CATEGORIA     as categoria,
                       VL_PRECO         as preco,
                       QTD_ESTOQUE      as estoque,
-                      NR_TAMANHO       as tamanho,
                       DS_DETALHES      as detalhes,
                       IMG_PRODUTO      as imagem,
                       COD_PRODUTO      as codigo

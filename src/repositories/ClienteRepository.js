@@ -2,16 +2,46 @@ import conexao from "./connection.js";
 
 
 export async function Login(email, senha) {
-  const comando = `select id_cadastro   as id,
-                   ds_email             as email,
-                   ds_senha             as senha
-                from tb_cadastro
-                where ds_email = ?
-                and ds_senha = ? `
+  const comando = `
+    select tb_usuario.id_usuario      as id,
+           nm_usuario                 as nome
+        from tb_usuario
+        inner join tb_login_usuario on tb_login_usuario.id_usuario = tb_usuario.id_usuario
+      where ds_email = ?
+        and ds_senha = md5(?)
+  `
 
   const [linhas] = await conexao.query(comando, [email, senha])
   return linhas[0];
 }
+
+
+export async function Cadastro(cliente) {
+  const comando = `
+    insert into tb_usuario (nm_usuario, dt_nascimento, ds_telefone, ds_cpf, ds_genero)
+    values (?, ?, ?, ?, ?)
+  `
+
+  const [respUsuario] = await conexao.query(comando,
+     [cliente.nome,
+      cliente.nascimento, 
+      cliente.telefone, 
+      cliente.cpf, 
+      cliente.genero]);
+
+  const idUsuario = respUsuario.insertId;
+
+  const comandoLogin = `
+    insert into tb_login_usuario (id_usuario, ds_email, ds_senha)
+    values (?, ?, md5(?))
+  `;
+
+  await conexao.query(comandoLogin, [idUsuario, cliente.email, cliente.senha]);
+
+  cliente.id = idUsuario;
+  return cliente;
+}
+
 
 
 export async function LoginAdm(email, senha) {
@@ -25,42 +55,6 @@ export async function LoginAdm(email, senha) {
   const [linhas] = await conexao.query(comando, [email, senha])
   return linhas[0];
 }
-
-
-export async function InserirCliente(cadastro) {
-    let comando = `
-        INSERT INTO tb_cadastro(ds_email, ds_senha, ds_telefone, ds_nome, ds_sobrenome, dt_nascimento, ds_cpf) VALUES (?, ?, ?, ?, ?, ?, ?)
-    `;
-
-    let [resp] = await conexao.query(comando, [
-        cadastro.email,
-        cadastro.senha,
-        cadastro.telefone,
-        cadastro.nome,
-        cadastro.sobrenome,
-        cadastro.nascimento,
-        cadastro.cpf
-    ]);
-
-    cadastro.id = resp.insertId;
-    return cadastro;
-}
-
-
-
-
-
-  export async function DeletarCliente(id) {
-    let comando = `
-        delete from tb_cadastro
-              where ID_CADASTRO = ?
-    `
-  
-    let [resp] = await conexao.query(comando, [id]);
-    return resp.affectedRows;
-  };
-
-  
 
   
 

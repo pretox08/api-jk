@@ -34,8 +34,8 @@ endpoints.put('/produto/:id', async (req,resp) => {
           throw new Error('Nome do produto é obrigatório!')
         }
     
-        if(!produto.tipo){
-          throw new Error('Tipo do produto obrigatório!')
+        if(!produto.categoria){
+          throw new Error('Categoria do produto obrigatório!')
         }
     
         if(!produto.preco){
@@ -46,16 +46,8 @@ endpoints.put('/produto/:id', async (req,resp) => {
           throw new Error('Coloque a quantidade em estoque!')
         }
     
-        if(!produto.tamanho){
-          throw new Error('Tamanho obrigatório!')
-        }
-    
         if(!produto.detalhes){
           throw new Error('Insira os detalhes do produto!')
-        }
-
-        if(!produto.codigo){
-          throw new Error('Insira o código do produto!')
         }
 
       else 
@@ -77,8 +69,8 @@ endpoints.post('/produto', async (req,resp) => {
       throw new Error('Nome do produto é obrigatório!')
     }
 
-    if(!produto.tipo){
-      throw new Error('Tipo do produto obrigatório!')
+    if(!produto.categoria){
+      throw new Error('Categoria do produto obrigatório!')
     }
 
     if(!produto.preco){
@@ -89,16 +81,8 @@ endpoints.post('/produto', async (req,resp) => {
       throw new Error('Coloque a quantidade em estoque!')
     }
 
-    if(!produto.tamanho){
-      throw new Error('Tamanho obrigatório!')
-    }
-
     if(!produto.detalhes){
       throw new Error('Insira os detalhes do produto!')
-    }
-
-    if(!produto.codigo){
-      throw new Error('Insira um código ao produto!')
     }
 
     let dados = await InserirProduto(produto);
@@ -118,7 +102,7 @@ endpoints.put('/produto/:id/imagem', upload.single('imagem'), async (req,resp) =
       const {id} = req.params;
       const imagem = req.file.path;
 
-      if(!req.file){
+      if(!imagem){
         throw new Error('Escolha a imagem do produto')
       }
 
@@ -185,7 +169,7 @@ endpoints.delete('/produto/:id', async (req, resp) => {
         const r = await BuscarPorID(id)
 
         if(!r){
-          resp.status(404).send({
+          resp.status(400).send({
             erro: 'Produto não encontrado'
           })
         }

@@ -83,12 +83,6 @@ create table tb_produto (
 );
 
 
-create table tb_carrinho (
-	ID_CARRINHO integer primary key auto_increment,
-	ID_PRODUTO integer,
-    foreign key(id_produto)references tb_produto(id_produto)
-);
-
 
 create table tb_pedido (
 	ID_PEDIDO int primary key auto_increment,
