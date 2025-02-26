@@ -27,7 +27,7 @@ import randomString from 'randomstring';
     const codigoproduto = randomString.generate(7);
     const dataAtual = new Date();
 
-    let [resp] = await conexao.query(comando, [
+    const [resp] = await conexao.query(comando, [
         produto.nome,
         produto.categoria,
         produto.preco,
@@ -41,6 +41,14 @@ import randomString from 'randomstring';
     produto.codigo = codigoproduto;
     produto.data = dataAtual;
     return produto;
+}
+
+export async function SalvarProdutoCategoria(idProduto, idCategoria) {
+  const comando = `
+              insert into tb_produto_categoria(id_produto, id_categoria)  
+                      values (?, ?)
+              `
+  await conexao.query(comando, [idProduto, idCategoria]); 
 }
 
 
@@ -88,8 +96,8 @@ import randomString from 'randomstring';
 
   export async function InserirImagem(imagem, id) {
 
-    const comando = 
-    `update tb_produto
+    const comando = `
+        update tb_produto
           set IMG_PRODUTO = ?
           where ID_PRODUTO = ?`
     

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { InserirProduto, BuscarPorID, DeletarProduto, ConsultarProduto, listarProdutos, InserirImagem, EditarProduto } from "../repositories/ProdutoRepository.js";
+import { InserirProduto, SalvarProdutoCategoria, BuscarPorID, DeletarProduto, ConsultarProduto, listarProdutos, InserirImagem, EditarProduto } from "../repositories/ProdutoRepository.js";
 
 import multer from 'multer';
 
@@ -85,8 +85,10 @@ endpoints.post('/produto', async (req,resp) => {
       throw new Error('Insira os detalhes do produto!')
     }
 
-    let dados = await InserirProduto(produto);
-    resp.send(dados);
+    const novoProduto = await InserirProduto(produto);
+    await SalvarProdutoCategoria(novoProduto.id, produto.categoria);
+
+    resp.send(novoProduto);
   }
 
   catch(err) {

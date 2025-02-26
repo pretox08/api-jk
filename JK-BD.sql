@@ -1,101 +1,136 @@
-create database joiasking;
-use joiasking;
-
-
-
-create table tb_tipo_produto (
-	ID_TP_PRODUTO  int primary key auto_increment,
-	TP_PRODUTO varchar(50)
+create table tb_categoria (
+	id_categoria	   int primary key auto_increment,
+    nm_categoria    varchar(80)
 );
 
-
-
-create table tb_tp_pagamento (
-	ID_TP_PAGAMENTO integer primary key auto_increment,
-	TP_PAGAMENTO varchar(40)
-);
-
-
-create table tb_cadastro (
-	ID_CADASTRO integer primary key auto_increment,
-	DS_EMAIL varchar(100),
-	DS_SENHA varchar(100),
-	DS_TELEFONE varchar(100),
-	DS_NOME varchar(100),
-	DS_SOBRENOME varchar(100),
-	DT_NASCIMENTO varchar(100),
-    IMG_PERFIL varchar(1000)
-);
-
-
-create table tb_perfil(
-	ID_PERFIL int primary key auto_increment,
-	DS_NOME varchar(100),
-	DS_SOBRENOME varchar(100),
-	DS_EMAIL varchar(100),
-	CF_EMAIL varchar(100),
-	IMG_PERFIL varchar(10000)
-	foreign key(DS_NOME) references tb_cadastro(DS_NOME)
-	foreign key(DS_SOBRENOME) references tb_cadastro(DS_SOBRENOME)
-	foreign key(DS_EMAIL) references tb_cadastro(DS_EMAIL)
-)
-
-
-create table tb_admin (
-	ID_ADMIN integer primary key auto_increment,
-	NM_USUARIO	varchar(50),
-	DS_EMAIL varchar(200),
-	DS_SENHA varchar(200)
-);
-
-
-create table tb_endereco(
-	ID_ENDERECO integer primary key auto_increment,
-    ID_CADASTRO integer,
-	DS_RUA varchar(200),
-	DS_CEP varchar(9),
-	NR_CASA integer,
-	DS_CIDADE varchar(80),
-	DS_ESTADO varchar(100),
-    foreign key(id_cadastro) references tb_cadastro(id_cadastro)
-);
-
-
-create table tb_comentarios(
-id_comentarios	int primary key auto_increment,
-ds_comentario	varchar(50),
-nr_avaliacao	int,
-nm_usuario		varchar(20)
-);
 
 create table tb_produto (
-	ID_PRODUTO  int primary key auto_increment,
-	NM_PRODUTO varchar(100),
-	ID_TP_PRODUTO int,
-	VL_PRECO decimal(5,2),
-	BT_DISPONIVEL boolean,
-	QTD_ESTOQUE int,
-	NR_TAMANHO int,
-	DS_DETALHES varchar(300),
-	IMG_PRODUTO varchar(1000),
-	COD_PRODUTO varchar(6),
-    foreign key(id_tp_produto) references tb_tipo_produto(id_tp_produto)
+	id_produto		int primary key auto_increment,
+    id_categoria    int,
+	nm_produto		varchar(200),
+    vl_preco		decimal(10,2),
+    qtd_estoque		int,
+    ds_detalhes		varchar(500),
+    cod_produto		varchar(7),
+	dt_criacao		datetime,
+    img_produto		varchar(800),
+    foreign key (id_categoria) references tb_categoria (id_categoria)
 );
 
+
+
+create table tb_produto_categoria (
+	id_produto_categoria	int primary key auto_increment,
+    id_categoria			int,
+    id_produto				int,
+    foreign key (id_categoria) references tb_categoria (id_categoria),
+    foreign key (id_produto) references tb_produto (id_produto)
+);
+
+
+create table tb_usuario (
+	id_usuario			int primary key auto_increment,
+    nm_usuario			varchar(200),
+    dt_nascimento		date,
+    ds_telefone			varchar(200),
+    ds_cpf				varchar(200),
+    ds_genero			varchar(200)
+);
+
+
+create table tb_usuario_imagem(
+	id_usuario_imagem	int primary key auto_increment,
+    id_usuario			int,
+    ds_imagem			varchar(800),
+    foreign key (id_usuario) references tb_usuario(id_usuario)
+);
+
+select * from tb_usuario;
+
+
+create table tb_login_usuario (
+	id_login_usuario	    int primary key auto_increment,
+    id_usuario				int,
+    ds_email	  			varchar(800),
+    ds_senha	  			varchar(800),
+    bt_trocar				boolean,
+    cod_reset				varchar(20),
+    dt_expiracao_cod		datetime,
+    foreign key (id_usuario) references tb_usuario (id_usuario)
+);
+
+
+select * from tb_login_usuario;
+
+
+select md5('1234');
+
+
+create table tb_usuario_endereco (
+	id_usuario_endereco			int primary key auto_increment,
+	id_usuario					int,
+    ds_referencia               varchar(200),
+    ds_cep						varchar(50),
+    ds_logradouro				varchar(400),
+    ds_bairro					varchar(100),
+    ds_cidade					varchar(100),
+    ds_estado					varchar(100),
+    ds_numero					varchar(100),
+    ds_complemento				varchar(200),
+    foreign key (id_usuario) references tb_usuario (id_usuario)
+);
+
+select * from tb_usuario_endereco;
+
+
+
+
+create table tb_cupom (
+	id_cupom			int primary key auto_increment,
+    cod_cupom			varchar(200),
+    vl_cupom			decimal(15,2),
+    qtd_restante		int
+);
 
 
 create table tb_pedido (
-	ID_PEDIDO int primary key auto_increment,
-	ID_CADASTRO int,
-	ID_ENDERECO int,
-	ID_TP_PAGAMENTO int,
-	DT_PEDIDO date,
-	QTD_ITENS int,
-	QTD_PARCELA int,
-	DS_SITUACAO boolean,
-	NR_CARTAO int,
-	NR_VERIFICACAO integer,
-    foreign key(id_tp_pagamento) references tb_tp_pagamento(id_tp_pagamento),
-    foreign key(id_cadastro) references tb_cadastro(id_cadastro),
-    foreign key(id_endereco) references tb_endereco(id_endereco)
+	id_pedido			int primary key auto_increment,
+    id_usuario			int,
+    id_usuario_endereco	int,
+    id_cupom			int,
+    dt_pedido			datetime,
+    cod_nota_fiscal		varchar(200),
+    tp_frete			varchar(200),
+    vl_frete			decimal(15,2),
+    ds_status			varchar(200),
+    tp_pagamento		varchar(200),
+    foreign key (id_usuario) references tb_usuario (id_usuario),
+    foreign key (id_usuario_endereco) references tb_usuario_endereco (id_usuario_endereco),
+    foreign key (id_cupom) references tb_cupom (id_cupom)
+);
+
+
+create table tb_pedido_item (
+	id_pedido_item		int primary key auto_increment,
+    id_pedido			int,
+    id_produto			int,
+    qtd_itens			int,
+    vl_produto			decimal(15,2),
+    foreign key (id_pedido) references tb_pedido (id_pedido),
+    foreign key (id_produto) references tb_produto (id_produto)
+);
+
+
+
+
+create table tb_pagamento_cartao (
+	id_pagamento_cartao	int primary key auto_increment,
+    id_pedido			int,
+    nm_cartao			varchar(200),
+    nr_cartao			varchar(200),
+    dt_vencimento		varchar(200),
+    cod_seguranca		varchar(200),
+    nr_parcelas			int,
+    ds_forma_pagamento	varchar(200),
+    foreign key (id_pedido) references tb_pedido (id_pedido)
 );
